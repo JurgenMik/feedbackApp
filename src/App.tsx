@@ -159,9 +159,9 @@ function App() {
                                   </div>
                                   <div className="w-1/6 flex">
                                       <BsFillChatFill className="text-gray-300 text-xl" />
-                                      <p className="ml-2 text-blue-800 font-bold">
-                                          {details.comments !== undefined ?
-                                              details.comments.length : 0
+                                      <p className={`${!details.comments ? "text-gray-400" : 'text-blue-800'} ml-2 font-bold`}>
+                                          {!details.comments ? 0 :
+                                              details.comments.length
                                           }
                                       </p>
                                   </div>
