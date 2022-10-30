@@ -7,11 +7,49 @@ import {feedbackInterface} from "./Interfaces/Feedback";
 
 function App() {
 
-  const [suggestions, setSuggestions] = useState<feedbackInterface[]>([]);
+    const [suggestions, setSuggestions] = useState<feedbackInterface[]>([]);
+    const [sort, setSort] = useState<string>();
 
-  useEffect(() => {
-    setSuggestions(data.productRequests);
-  }, [])
+    useEffect(() => {
+        setSuggestions(data.productRequests);
+    }, [])
+
+    useEffect(() => {
+        handleSort();
+    }, [sort])
+
+    const handleSelect = (e : React.ChangeEvent<HTMLSelectElement>) => {
+        setSort(e.target.value);
+    }
+
+    const handleSort = () => {
+      if (sort === 'mostVotes') {
+          suggestions.sort((a : any, b : any) =>
+              a.upvotes > b.upvotes ? -1 : 1
+          );
+      }
+      if (sort === 'leastVotes') {
+          suggestions.sort((a : any, b : any) =>
+              a.upvotes < b.upvotes ? -1 : 1
+          );
+      }
+      if (sort === 'mostComments') {
+          suggestions.sort((a : any, b : any ) => {
+              const k1 = a.comments === undefined  ? 0 : a.comments.length
+              const k2 = b.comments === undefined ? 0 : b.comments.length
+
+              return k1 > k2 ? -1 : 1;
+          })
+      }
+      if (sort === 'leastComments') {
+          suggestions.sort((a : any, b : any ) => {
+              const k1 = a.comments === undefined  ? 0 : a.comments.length
+              const k2 = b.comments === undefined ? 0 : b.comments.length
+
+              return k1 < k2 ? -1 : 1;
+          })
+      }
+    }
 
   return (
       <div className="w-full h-screen">
@@ -84,6 +122,7 @@ function App() {
                           <select
                               name="sort"
                               className="bg-slate-700 text-gray-400 pl-4"
+                              onChange={handleSelect}
                           >
                               <option value="mostVotes">Sort by: Most Upvotes</option>
                               <option value="leastVotes">Sort by: Least Upvotes</option>
@@ -113,7 +152,9 @@ function App() {
                                           {details.description}
                                       </h1>
                                       <div className="ml-6 text-blue-700 text-sm font-bold">
-                                          <h1>{details.category}</h1>
+                                          <h1>
+                                              {details.category}
+                                          </h1>
                                       </div>
                                   </div>
                                   <div className="w-1/6 flex">
