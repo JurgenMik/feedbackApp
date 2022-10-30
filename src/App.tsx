@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {BsDot, BsFillChatFill} from 'react-icons/bs';
 import {GiLightBulb} from 'react-icons/gi';
 import {GoChevronUp} from 'react-icons/go';
@@ -25,12 +25,12 @@ function App() {
     const handleSort = () => {
       if (sort === 'mostVotes') {
           suggestions.sort((a : any, b : any) =>
-              a.upvotes > b.upvotes ? -1 : 1
+              a.upvotes > b.upvotes ? 1 : -1
           );
       }
       if (sort === 'leastVotes') {
           suggestions.sort((a : any, b : any) =>
-              a.upvotes < b.upvotes ? -1 : 1
+              a.upvotes < b.upvotes ? 1 : -1
           );
       }
       if (sort === 'mostComments') {
@@ -38,17 +38,33 @@ function App() {
               const k1 = a.comments === undefined  ? 0 : a.comments.length
               const k2 = b.comments === undefined ? 0 : b.comments.length
 
-              return k1 > k2 ? -1 : 1;
-          })
+              return k1 > k2 ? 1 : -1;
+          });
       }
       if (sort === 'leastComments') {
           suggestions.sort((a : any, b : any ) => {
               const k1 = a.comments === undefined  ? 0 : a.comments.length
               const k2 = b.comments === undefined ? 0 : b.comments.length
 
-              return k1 < k2 ? -1 : 1;
-          })
+              return k1 < k2 ? 1 : -1;
+          });
       }
+    }
+
+    const handleVoteIncrement = (e : React.MouseEvent<HTMLOrSVGElement>, index : any) => {
+        const voteCount : any = suggestions[index].upvotes;
+
+        let increment = voteCount + 1;
+
+        setSuggestions((prev : any) => {
+            const updatedCount = prev.map((obj : any, objIndex : number) => {
+                if (index === objIndex) {
+                    return {...obj, upvotes : increment};
+                }
+                return obj;
+            });
+            return updatedCount;
+        });
     }
 
   return (
@@ -137,11 +153,11 @@ function App() {
                       </div>
                   </div>
                   <div className="w-full h-full mt-16 space-y-16">
-                      {suggestions.map((details: any, index: number) => {
+                      {suggestions.map((details : any, index : number) => {
                           return (
                               <div className="w-full h-24 flex items-center" key={index}>
                                   <div className="w-1/6 flex flex-col items-center text-blue-800 font-bold">
-                                      <GoChevronUp />
+                                      <GoChevronUp onClick={e => handleVoteIncrement(e, index)} />
                                       <h1>{details.upvotes}</h1>
                                   </div>
                                   <div className="w-4/6 flex flex-col space-y-2">
