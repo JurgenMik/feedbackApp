@@ -3,18 +3,27 @@ import {BsDot, BsFillChatFill} from 'react-icons/bs';
 import {GiLightBulb} from 'react-icons/gi';
 import {GoChevronUp} from 'react-icons/go';
 import data from './data.json';
-import {feedbackInterface, category} from "./Interfaces/Feedback";
+import {feedbackInterface, category, roadmap} from "./Interfaces/Feedback";
 
 function App() {
 
     const [suggestions, setSuggestions] = useState<feedbackInterface[]>([]);
     const [sort, setSort] = useState<string>();
+    const [roadmapCount, setCount] = useState<roadmap>({
+        planned: 0,
+        live: 0,
+        in_progress: 0,
+    });
     const [category, setCategory] = useState<category>({
-            isActive : ''
-        });
+        isActive : ''
+    });
 
     useEffect(() => {
         setSuggestions(data.productRequests);
+        handleRoadMapCount();
+    }, [suggestions.length])
+
+    useEffect(() => {
         setCategory({...category, isActive : 'all'});
     }, [])
 
@@ -24,6 +33,15 @@ function App() {
 
     const handleSelect = (e : React.ChangeEvent<HTMLSelectElement>) => {
         setSort(e.target.value);
+    }
+
+    const handleRoadMapCount = () => {
+        const planned = suggestions.filter((feedback) =>
+            feedback.status === 'planned').length;
+        const live = suggestions.filter((feedback) => feedback.status === 'in-progress').length;
+        const progress = suggestions.filter((feedback) => feedback.status === 'live').length;
+
+        setCount({...roadmapCount, planned : planned, live : live, in_progress : progress});
     }
 
     const handleSort = () => {
@@ -163,7 +181,7 @@ function App() {
                                 <h1>Planned</h1>
                             </span>
                               <p className="ml-auto float-right font-bold text-blue-800">
-                                  2
+                                  {roadmapCount.planned}
                               </p>
                           </div>
                           <div className="w-full h-6 flex flex-row">
@@ -171,7 +189,7 @@ function App() {
                                  <h1>In-Progress</h1>
                              </span>
                               <p className="ml-auto float-right font-bold text-blue-800">
-                                  3
+                                  {roadmapCount.in_progress}
                               </p>
                           </div>
                           <div className="flex flex-row">
@@ -179,7 +197,7 @@ function App() {
                                 <h1>Live</h1>
                             </span>
                               <p className="ml-auto float-right font-bold text-blue-800">
-                                  1
+                                  {roadmapCount.live}
                               </p>
                           </div>
                       </div>

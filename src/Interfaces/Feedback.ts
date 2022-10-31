@@ -10,5 +10,11 @@ export interface feedbackInterface {
 }
 
 export interface category {
-    isActive : string,
+    isActive: string,
+}
+
+export interface roadmap {
+    planned: number,
+    live: number,
+    in_progress: number,
 }
