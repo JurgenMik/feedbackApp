@@ -3,17 +3,17 @@ import {BsDot, BsFillChatFill} from 'react-icons/bs';
 import {GiLightBulb} from 'react-icons/gi';
 import {GoChevronUp} from 'react-icons/go';
 import data from './data.json';
-import {feedbackInterface, category, roadmap} from "./Interfaces/Feedback";
+import {feedbackInterface, category} from "./Interfaces/Feedback";
+import RoadMap from "./components/RoadMap";
 
 function App() {
 
     const [suggestions, setSuggestions] = useState<feedbackInterface[]>([]);
     const [sort, setSort] = useState<string>();
-    const [roadmapCount, setCount] = useState<roadmap>({
-        planned: 0,
-        live: 0,
-        in_progress: 0,
-    });
+    const [view, setView] = useState<boolean>(false);
+    const [planned, setPlanned] = useState<feedbackInterface[]>([]);
+    const [live, setLive] = useState<feedbackInterface[]>([]);
+    const [progress, setProgress] = useState<feedbackInterface[]>([]);
     const [category, setCategory] = useState<category>({
         isActive : ''
     });
@@ -36,12 +36,10 @@ function App() {
     }
 
     const handleRoadMapCount = () => {
-        const planned = suggestions.filter((feedback) =>
-            feedback.status === 'planned').length;
-        const live = suggestions.filter((feedback) => feedback.status === 'in-progress').length;
-        const progress = suggestions.filter((feedback) => feedback.status === 'live').length;
-
-        setCount({...roadmapCount, planned : planned, live : live, in_progress : progress});
+        setPlanned(planned.concat(suggestions.filter((feedback) =>
+            feedback.status === 'planned')));
+        setProgress(progress.concat(suggestions.filter((feedback) => feedback.status === 'in-progress')));
+        setLive(live.concat(suggestions.filter((feedback) => feedback.status === 'live')));
     }
 
     const handleSort = () => {
@@ -118,8 +116,17 @@ function App() {
 
     const filteredList = useMemo(handleFilters, [category, suggestions]);
 
+    const handleRoadMapView = () => {
+        setView(true);
+    }
+
+    const handleBack = () => {
+        setView(false);
+    }
+
     return (
       <div className="w-full h-screen">
+          {view ? <RoadMap handleBack={handleBack} live={live} planned={planned} progress={progress} /> :
           <div className="w-3/4 h-full ml-auto mr-auto grid grid-cols-6">
               <div className="col-span-2 w-full h-full flex flex-col items-center space-y-6">
                   <div className="w-3/4 h-40 mt-8 rounded-xl bg-background bg-cover mb-6">
@@ -171,7 +178,7 @@ function App() {
                           <h1 className="text-lg text-slate-700 font-bold">
                               Roadmap
                           </h1>
-                          <p className="ml-auto float-right text-blue-600 underline">
+                          <p onClick={handleRoadMapView} className="ml-auto float-right text-blue-600 underline">
                               View
                           </p>
                       </div>
@@ -181,15 +188,15 @@ function App() {
                                 <h1>Planned</h1>
                             </span>
                               <p className="ml-auto float-right font-bold text-blue-800">
-                                  {roadmapCount.planned}
+                                  {planned.length}
                               </p>
                           </div>
                           <div className="w-full h-6 flex flex-row">
-                             <span className="flex items-center"><BsDot className="text-4xl text-violet-400" />
+                             <span className="flex items-center"><BsDot className="text-4xl text-fuchsia-500" />
                                  <h1>In-Progress</h1>
                              </span>
                               <p className="ml-auto float-right font-bold text-blue-800">
-                                  {roadmapCount.in_progress}
+                                  {progress.length}
                               </p>
                           </div>
                           <div className="flex flex-row">
@@ -197,7 +204,7 @@ function App() {
                                 <h1>Live</h1>
                             </span>
                               <p className="ml-auto float-right font-bold text-blue-800">
-                                  {roadmapCount.live}
+                                  {live.length}
                               </p>
                           </div>
                       </div>
@@ -230,7 +237,7 @@ function App() {
                   <div className="w-full h-full mt-16 space-y-16">
                       {filteredList.map((details : any, index : number) => {
                           return (
-                              <div className="w-full h-24 flex items-center" key={index}>
+                              <div className="w-full h-24 flex items-center" key={details.id}>
                                   <div className="w-1/6 flex flex-col items-center text-blue-800 font-bold">
                                       <GoChevronUp onClick={e => handleVoteIncrement(e, index)} />
                                       <h1>{details.upvotes}</h1>
@@ -262,6 +269,7 @@ function App() {
                   </div>
               </div>
           </div>
+          }
       </div>
   );
 }

@@ -13,8 +13,4 @@ export interface category {
     isActive: string,
 }
 
-export interface roadmap {
-    planned: number,
-    live: number,
-    in_progress: number,
-}
+
