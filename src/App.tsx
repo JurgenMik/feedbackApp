@@ -1,17 +1,21 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 import {BsDot, BsFillChatFill} from 'react-icons/bs';
 import {GiLightBulb} from 'react-icons/gi';
 import {GoChevronUp} from 'react-icons/go';
 import data from './data.json';
-import {feedbackInterface} from "./Interfaces/Feedback";
+import {feedbackInterface, category} from "./Interfaces/Feedback";
 
 function App() {
 
     const [suggestions, setSuggestions] = useState<feedbackInterface[]>([]);
     const [sort, setSort] = useState<string>();
+    const [category, setCategory] = useState<category>({
+            isActive : ''
+        });
 
     useEffect(() => {
         setSuggestions(data.productRequests);
+        setCategory({...category, isActive : 'all'});
     }, [])
 
     useEffect(() => {
@@ -67,7 +71,36 @@ function App() {
         });
     }
 
-  return (
+    const handleFilters = () => {
+        if (category.isActive === 'ui') {
+            return suggestions.filter((feedback) =>
+                feedback.category === 'UI');
+        }
+        if (category.isActive === 'ux') {
+            return suggestions.filter((feedback) =>
+                feedback.category === 'UX');
+        }
+        if (category.isActive === 'feature') {
+            return suggestions.filter((feedback) =>
+                feedback.category === 'Feature');
+        }
+        if (category.isActive === 'bug') {
+            return suggestions.filter((feedback) =>
+                feedback.category === 'Bug');
+        }
+        if (category.isActive === 'enhancement') {
+            return suggestions.filter((feedback) =>
+                feedback.category === 'Enhancement');
+        }
+        if (category.isActive === 'all') {
+            return suggestions;
+        }
+        return suggestions;
+    }
+
+    const filteredList = useMemo(handleFilters, [category, suggestions]);
+
+    return (
       <div className="w-full h-screen">
           <div className="w-3/4 h-full ml-auto mr-auto grid grid-cols-6">
               <div className="col-span-2 w-full h-full flex flex-col items-center space-y-6">
@@ -81,15 +114,39 @@ function App() {
                   </div>
                   <div className="w-1/2 h-40 ml-auto mr-auto space-y-4 text-blue-600 font-bold">
                       <div className="w-full space-x-10">
-                          <button>All</button>
-                          <button>UI</button>
-                          <button>UX</button>
+                          <button
+                              className={`${category.isActive === 'all' ? "p-1 pl-4 pr-4 bg-blue-800 text-white rounded-xl" : null}`}
+                              onClick={e => setCategory({...category, isActive : 'all'})}>
+                              All
+                          </button>
+                          <button
+                              className={`${category.isActive === 'ui' ? "p-1 pl-4 pr-4 bg-blue-800 text-white rounded-xl" : null}`}
+                              onClick={e => setCategory({...category, isActive : 'ui'})}>
+                              UI
+                          </button>
+                          <button
+                              className={`${category.isActive === 'ux' ? "p-1 pl-4 pr-4 bg-blue-800 text-white rounded-xl" : null}`}
+                              onClick={e => setCategory({...category, isActive : 'ux'})}>
+                              UX
+                          </button>
                       </div>
                       <div className="w-full space-x-10">
-                          <button>Enhancement</button>
-                          <button>Bug</button>
+                          <button
+                              className={`${category.isActive === 'enhancement' ? "p-1 pl-4 pr-4 bg-blue-800 text-white rounded-xl" : null}`}
+                              onClick={e => setCategory({...category, isActive : 'enhancement'})}>
+                              Enhancement
+                          </button>
+                          <button
+                              className={`${category.isActive === 'bug' ? "p-1 pl-4 pr-4 bg-blue-800 text-white rounded-xl" : null}`}
+                              onClick={e => setCategory({...category, isActive : 'bug'})}>
+                              Bug
+                          </button>
                       </div>
-                      <button>Feature</button>
+                      <button
+                          className={`${category.isActive === 'feature' ? "p-1 pl-4 pr-4 bg-blue-800 text-white rounded-xl" : null}`}
+                          onClick={e => setCategory({...category, isActive : 'feature'})}>
+                          Feature
+                      </button>
                   </div>
                   <div className="w-2/3 h-40">
                       <div className="w-full flex flex-row">
@@ -147,13 +204,13 @@ function App() {
                           </select>
                       </div>
                       <div className="w-1/5 h-full flex items-center">
-                          <button className="w-4/5 p-3 rounded-xl bg-fuchsia-500 text-white">
+                          <button className="w-4/5 p-3 rounded-lg bg-fuchsia-500 text-white font-semibold text-sm">
                               + Add Feedback
                           </button>
                       </div>
                   </div>
                   <div className="w-full h-full mt-16 space-y-16">
-                      {suggestions.map((details : any, index : number) => {
+                      {filteredList.map((details : any, index : number) => {
                           return (
                               <div className="w-full h-24 flex items-center" key={index}>
                                   <div className="w-1/6 flex flex-col items-center text-blue-800 font-bold">

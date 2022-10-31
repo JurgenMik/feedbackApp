@@ -8,3 +8,7 @@ export interface feedbackInterface {
     comments ?: Array<object | undefined>
     replies ?: Array<object | undefined>
 }
+
+export interface category {
+    isActive : string,
+}
