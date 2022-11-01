@@ -1,5 +1,5 @@
 export interface feedbackInterface {
-    id: number,
+    id ?: number,
     title: string,
     category: string,
     upvotes: number,

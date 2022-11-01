@@ -5,12 +5,14 @@ import {GoChevronUp} from 'react-icons/go';
 import data from './data.json';
 import {feedbackInterface, category} from "./Interfaces/Feedback";
 import RoadMap from "./components/RoadMap";
+import CreateFeedback from "./components/CreateFeedback";
 
 function App() {
 
     const [suggestions, setSuggestions] = useState<feedbackInterface[]>([]);
     const [sort, setSort] = useState<string>();
     const [view, setView] = useState<boolean>(false);
+    const [create, setCreate] = useState<boolean>(false);
     const [planned, setPlanned] = useState<{in_planning : Array<feedbackInterface>}>({
         in_planning: []
     });
@@ -26,7 +28,7 @@ function App() {
 
     useEffect(() => {
         setSuggestions(data.productRequests);
-    }, [suggestions.length])
+    }, [])
 
     useEffect(() => {
         handleRoadMapCount();
@@ -135,11 +137,17 @@ function App() {
 
     const handleBack = () => {
         setView(false);
+        setCreate(false);
+    }
+
+    const handleCreateView = () => {
+        setCreate(true);
     }
 
     return (
       <div className="w-full h-screen">
-          {view ? <RoadMap handleBack={handleBack} live={live} planned={planned} progress={progress} /> :
+          {create ? <CreateFeedback handleBack={handleBack} setSuggestions={setSuggestions} suggestions={suggestions} setCreate={setCreate} /> :
+          view ? <RoadMap handleBack={handleBack} handleCreateView={handleCreateView} live={live} planned={planned} progress={progress} /> :
           <div className="w-3/4 h-full ml-auto mr-auto grid grid-cols-6">
               <div className="col-span-2 w-full h-full flex flex-col items-center space-y-6">
                   <div className="w-3/4 h-40 mt-8 rounded-xl bg-background bg-cover mb-6">
@@ -242,7 +250,7 @@ function App() {
                           </select>
                       </div>
                       <div className="w-1/5 h-full flex items-center">
-                          <button className="w-4/5 p-3 rounded-lg bg-fuchsia-500 text-white font-semibold text-sm">
+                          <button onClick={handleCreateView} className="w-4/5 p-3 rounded-lg bg-fuchsia-500 text-white font-semibold text-sm">
                               + Add Feedback
                           </button>
                       </div>
