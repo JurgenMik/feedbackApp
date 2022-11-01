@@ -2,22 +2,24 @@ import React from 'react';
 import {GoChevronLeft, GoChevronUp} from 'react-icons/go';
 import {BsDot, BsFillChatFill} from 'react-icons/bs';
 
-function RoadMap({handleBack, live, progress, planned} : any) {
+function RoadMap({handleBack, handleCreateView, live, progress, planned} : any) {
 
     return (
         <div className="w-full h-full">
             <div className="w-3/4 h-28 ml-auto mr-auto bg-slate-700 mt-8 rounded-xl flex flex-row">
                 <div className="w-4/5 h-full flex flex-col justify-center ml-8">
                     <div className="flex items-center mb-4 text-white text-sm">
-                        <GoChevronLeft className="text-lg" onClick={handleBack} />
-                        <h1>Go Back</h1>
+                        <GoChevronLeft className="text-lg" />
+                        <h1 onClick={handleBack}>
+                            Go Back
+                        </h1>
                     </div>
                     <h1 className="text-2xl font-bold text-white">
                         RoadMap
                     </h1>
                 </div>
                 <div className="w-1/5 h-full flex items-center">
-                    <button className="w-3/5 p-3 rounded-lg bg-fuchsia-500 text-white font-semibold text-sm">
+                    <button onClick={handleCreateView} className="w-3/5 p-3 rounded-lg bg-fuchsia-500 text-white font-semibold text-sm">
                         + Add Feedback
                     </button>
                 </div>
