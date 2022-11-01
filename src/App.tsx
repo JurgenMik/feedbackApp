@@ -11,17 +11,26 @@ function App() {
     const [suggestions, setSuggestions] = useState<feedbackInterface[]>([]);
     const [sort, setSort] = useState<string>();
     const [view, setView] = useState<boolean>(false);
-    const [planned, setPlanned] = useState<feedbackInterface[]>([]);
-    const [live, setLive] = useState<feedbackInterface[]>([]);
-    const [progress, setProgress] = useState<feedbackInterface[]>([]);
+    const [planned, setPlanned] = useState<{in_planning : Array<feedbackInterface>}>({
+        in_planning: []
+    });
+    const [live, setLive] = useState<{in_live : Array<feedbackInterface>}>({
+        in_live: []
+    });
+    const [progress, setProgress] = useState<{in_progress : Array<feedbackInterface>}>({
+        in_progress: []
+    });
     const [category, setCategory] = useState<category>({
         isActive : ''
     });
 
     useEffect(() => {
         setSuggestions(data.productRequests);
-        handleRoadMapCount();
     }, [suggestions.length])
+
+    useEffect(() => {
+        handleRoadMapCount();
+    },[suggestions])
 
     useEffect(() => {
         setCategory({...category, isActive : 'all'});
@@ -36,10 +45,14 @@ function App() {
     }
 
     const handleRoadMapCount = () => {
-        setPlanned(planned.concat(suggestions.filter((feedback) =>
-            feedback.status === 'planned')));
-        setProgress(progress.concat(suggestions.filter((feedback) => feedback.status === 'in-progress')));
-        setLive(live.concat(suggestions.filter((feedback) => feedback.status === 'live')));
+        const inPlanning = suggestions.filter((feedback) =>
+            feedback.status === 'planned');
+        const inProgress = suggestions.filter((feedback) => feedback.status === 'in-progress')
+        const inLive = suggestions.filter((feedback) => feedback.status === 'live');
+
+        setProgress({...progress, in_progress : inProgress});
+        setPlanned({...planned, in_planning : inPlanning});
+        setLive({...live, in_live : inLive});
     }
 
     const handleSort = () => {
@@ -188,7 +201,7 @@ function App() {
                                 <h1>Planned</h1>
                             </span>
                               <p className="ml-auto float-right font-bold text-blue-800">
-                                  {planned.length}
+                                  {planned.in_planning.length}
                               </p>
                           </div>
                           <div className="w-full h-6 flex flex-row">
@@ -196,7 +209,7 @@ function App() {
                                  <h1>In-Progress</h1>
                              </span>
                               <p className="ml-auto float-right font-bold text-blue-800">
-                                  {progress.length}
+                                  {progress.in_progress.length}
                               </p>
                           </div>
                           <div className="flex flex-row">
@@ -204,7 +217,7 @@ function App() {
                                 <h1>Live</h1>
                             </span>
                               <p className="ml-auto float-right font-bold text-blue-800">
-                                  {live.length}
+                                  {live.in_live.length}
                               </p>
                           </div>
                       </div>

@@ -9,7 +9,7 @@ function RoadMap({handleBack, live, progress, planned} : any) {
             <div className="w-3/4 h-28 ml-auto mr-auto bg-slate-700 mt-8 rounded-xl flex flex-row">
                 <div className="w-4/5 h-full flex flex-col justify-center ml-8">
                     <div className="flex items-center mb-4 text-white text-sm">
-                        <GoChevronLeft onClick={handleBack} />
+                        <GoChevronLeft className="text-lg" onClick={handleBack} />
                         <h1>Go Back</h1>
                     </div>
                     <h1 className="text-2xl font-bold text-white">
@@ -25,13 +25,13 @@ function RoadMap({handleBack, live, progress, planned} : any) {
             <div className="w-3/4 h-full ml-auto mr-auto grid grid-cols-3">
                 <div className="w-full mt-10">
                     <h1 className="text-lg font-bold text-slate-700">
-                        Planned ({planned.length})
+                        Planned ({planned.in_planning.length})
                     </h1>
                     <p className="text-gray-400">
                         Ideas prioritized for research
                     </p>
                     <div className="w-full h-full mt-8">
-                        {planned.map((details : any, index : number) => {
+                        {planned.in_planning.map((details : any, index : number) => {
                             return (
                                 <div className="w-4/5 h-64 flex flex-col border-t-8 border-orange-400 rounded-lg mt-6" key={index}>
                                     <div className="w-4/5 h-full ml-auto mr-auto mt-6">
@@ -74,13 +74,13 @@ function RoadMap({handleBack, live, progress, planned} : any) {
                 </div>
                 <div className="w-full h-full mt-10">
                     <h1 className="text-lg font-bold text-slate-700">
-                        In-Progress ({progress.length})
+                        In-Progress ({progress.in_progress.length})
                     </h1>
                     <p className="text-gray-400">
                         Currently being developed
                     </p>
                     <div className="w-full h-full mt-8">
-                        {progress.map((details : any, index : number) => {
+                        {progress.in_progress.map((details : any, index : number) => {
                             return (
                                 <div className="w-4/5 h-64 flex flex-col border-t-8 border-fuchsia-500 rounded-md mt-6" key={index}>
                                     <div className="w-4/5 h-full ml-auto mr-auto mt-6">
@@ -123,13 +123,13 @@ function RoadMap({handleBack, live, progress, planned} : any) {
                 </div>
                 <div className="w-full h-full mt-10">
                     <h1 className="text-lg font-bold text-slate-700">
-                        Live ({live.length})
+                        Live ({live.in_live.length})
                     </h1>
                     <p className="text-gray-400">
                         Released features
                     </p>
                     <div className="w-full h-full mt-8">
-                        {live.map((details : any, index : number) => {
+                        {live.in_live.map((details : any, index : number) => {
                            return (
                                 <div className="w-4/5 h-64 flex flex-col border-t-8 border-sky-400 rounded-md" key={index}>
                                     <div className="w-4/5 h-full ml-auto mr-auto mt-6">
