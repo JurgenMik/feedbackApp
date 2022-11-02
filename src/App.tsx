@@ -6,6 +6,7 @@ import data from './data.json';
 import {feedbackInterface, category} from "./Interfaces/Feedback";
 import RoadMap from "./components/RoadMap";
 import CreateFeedback from "./components/CreateFeedback";
+import FeedbackDetails from "./components/FeedbackDetails";
 
 function App() {
 
@@ -13,6 +14,8 @@ function App() {
     const [sort, setSort] = useState<string>();
     const [view, setView] = useState<boolean>(false);
     const [create, setCreate] = useState<boolean>(false);
+    const [details, setDetails] = useState<boolean>(false);
+    const [selected, setSelected] = useState<object>();
     const [planned, setPlanned] = useState<{in_planning : Array<feedbackInterface>}>({
         in_planning: []
     });
@@ -31,12 +34,12 @@ function App() {
     }, [])
 
     useEffect(() => {
-        handleRoadMapCount();
-    },[suggestions])
-
-    useEffect(() => {
         setCategory({...category, isActive : 'all'});
     }, [])
+
+    useEffect(() => {
+        handleRoadMapCount();
+    },[suggestions])
 
     useEffect(() => {
         handleSort();
@@ -144,9 +147,16 @@ function App() {
         setCreate(true);
     }
 
+    const handleDetailedView = (details : any) => {
+        setSelected(details);
+
+        setDetails(true);
+    }
+
     return (
       <div className="w-full h-screen">
-          {create ? <CreateFeedback handleBack={handleBack} setSuggestions={setSuggestions} suggestions={suggestions} setCreate={setCreate} /> :
+          {details ? <FeedbackDetails selected={selected} setSelected={setSelected} setDetails={setDetails} data={data} /> :
+          create ? <CreateFeedback handleBack={handleBack} setSuggestions={setSuggestions} suggestions={suggestions} setCreate={setCreate} /> :
           view ? <RoadMap handleBack={handleBack} handleCreateView={handleCreateView} live={live} planned={planned} progress={progress} /> :
           <div className="w-3/4 h-full ml-auto mr-auto grid grid-cols-6">
               <div className="col-span-2 w-full h-full flex flex-col items-center space-y-6">
@@ -243,6 +253,7 @@ function App() {
                               className="bg-slate-700 text-gray-400 pl-4"
                               onChange={handleSelect}
                           >
+                              <option value="">Sort by: Upvotes & Comments</option>
                               <option value="mostVotes">Sort by: Most Upvotes</option>
                               <option value="leastVotes">Sort by: Least Upvotes</option>
                               <option value="mostComments">Sort by: Most Comments</option>
@@ -258,12 +269,12 @@ function App() {
                   <div className="w-full h-full mt-16 space-y-16">
                       {filteredList.map((details : any, index : number) => {
                           return (
-                              <div className="w-full h-24 flex items-center" key={details.id}>
+                              <div className="w-full h-24 flex items-center" key={index}>
                                   <div className="w-1/6 flex flex-col items-center text-blue-800 font-bold">
                                       <GoChevronUp onClick={e => handleVoteIncrement(e, index)} />
                                       <h1>{details.upvotes}</h1>
                                   </div>
-                                  <div className="w-4/6 flex flex-col space-y-2">
+                                  <div onClick={e => handleDetailedView(details)} className="w-4/6 flex flex-col space-y-2">
                                       <h1 className="text-lg text-slate-700 font-bold">
                                           {details.title}
                                       </h1>
