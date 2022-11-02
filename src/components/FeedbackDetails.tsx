@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
 import {GoChevronLeft, GoChevronUp} from 'react-icons/go';
 import {BsFillChatFill} from 'react-icons/bs';
+import EditFeedback from './EditFeedback';
 
-function FeedbackDetails({selected, setSelected, setDetails, data} : any) {
+function FeedbackDetails({selected, setSelected, setDetails, data, suggestions, setSuggestions} : any) {
 
     const [fieldCounter, setCounter] = useState<number>(250);
     const [error, setError] = useState<boolean>(false);
+    const [edit, setEdit] = useState<boolean>(false);
     const [comment, setComment] = useState<object>({
         content: '',
         user: {
@@ -37,7 +39,13 @@ function FeedbackDetails({selected, setSelected, setDetails, data} : any) {
         setComment({...comment, content : e.target.value});
     }
 
+    const handleEditView = () => {
+        setEdit(true);
+    }
+
     return (
+        <>
+        {edit ? <EditFeedback selected={selected} setSelected={setSelected} setEdit={setEdit} suggestions={suggestions} setSuggestions={setSuggestions} /> :
         <div className="w-2/5 h-full ml-auto mr-auto mt-8">
             <div className="w-full h-16 flex items-center">
                 <div className="w-4/5 flex items-center ml-6 text-blue-700 font-bold space-x-4">
@@ -47,7 +55,7 @@ function FeedbackDetails({selected, setSelected, setDetails, data} : any) {
                     </h1>
                 </div>
                 <div className="w-1/5">
-                    <button className="p-3 w-full bg-blue-900 rounded-xl text-white text-sm font-bold">
+                    <button onClick={handleEditView} className="p-3 w-full bg-blue-900 rounded-xl text-white text-sm font-bold">
                         Edit Feedback
                     </button>
                 </div>
@@ -183,6 +191,8 @@ function FeedbackDetails({selected, setSelected, setDetails, data} : any) {
                 </div>
                 : null}
         </div>
+            }
+        </>
     )
 }
 
