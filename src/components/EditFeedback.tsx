@@ -26,6 +26,8 @@ function EditFeedback({selected, setSelected, setEdit, suggestions, setSuggestio
     const handleDelete = () => {
         setSuggestions(suggestions.filter((suggestions : any) =>
             suggestions.id !== selected.id));
+
+        setEdit(false);
     }
 
     return (
