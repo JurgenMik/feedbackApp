@@ -92,7 +92,7 @@ function FeedbackDetails({selected, setSelected, setDetails, data, suggestions, 
                     <h1>{!selected.comments ? 0 : selected.comments.length} Comments</h1>
                 </div>
             </div>
-            <div className="w-full h-4/5 max-h-auto">
+            <div className="w-full h-4/5">
                 {!selected.comments ? <h1 className="text-xl font-bold flex justify-center mt-16">No comments under this feedback</h1> :
                     selected.comments.map((comments : any, index : number) => {
                         return (
@@ -126,7 +126,7 @@ function FeedbackDetails({selected, setSelected, setDetails, data, suggestions, 
                                     {!comments.replies ? null :
                                         comments.replies.map((replies : any, index: number) => {
                                         return (
-                                            <div className="w-full h-36 flex flex-row mb-16 mt-8" key={index}>
+                                            <div className="w-full h-36 flex flex-row mt-8 m-auto" key={index}>
                                                 <div className="w-24 h-full flex justify-center">
                                                     <img
                                                         className="w-12 h-12 rounded-full"
@@ -170,8 +170,7 @@ function FeedbackDetails({selected, setSelected, setDetails, data, suggestions, 
                         Add Comment
                     </h1>
                     <input
-                        name="comment"
-                        type="text"
+                        name="comment" type="text"
                         className="p-6 w-full rounded-md mt-4"
                         placeholder="Type your comment here..."
                         onChange={handleChange}
