@@ -2,13 +2,14 @@ import React, {useState} from 'react';
 import {GoChevronLeft, GoChevronUp} from 'react-icons/go';
 import {BsFillChatFill} from 'react-icons/bs';
 import EditFeedback from './EditFeedback';
+import {comment} from '../Interfaces/Feedback';
 
 function FeedbackDetails({selected, setSelected, setDetails, data, suggestions, setSuggestions} : any) {
 
     const [fieldCounter, setCounter] = useState<number>(250);
     const [error, setError] = useState<boolean>(false);
     const [edit, setEdit] = useState<boolean>(false);
-    const [comment, setComment] = useState<object>({
+    const [comment, setComment] = useState<comment>({
         content: '',
         user: {
             image: data.currentUser.image,
@@ -26,6 +27,14 @@ function FeedbackDetails({selected, setSelected, setDetails, data, suggestions, 
         const newComment = commentArr.concat(comment);
 
         setSelected({...selected, comments : newComment});
+    }
+
+    const handleVoteIncrement = () => {
+        const value = selected.upvotes;
+
+        const increment = value + 1;
+
+        setSelected({...selected, upvotes : increment});
     }
 
     const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -62,7 +71,7 @@ function FeedbackDetails({selected, setSelected, setDetails, data, suggestions, 
             </div>
             <div className="w-full h-28 flex items-center mt-8">
                 <div className="w-1/6 flex flex-col items-center text-blue-800 font-bold">
-                    <GoChevronUp />
+                    <GoChevronUp onClick={handleVoteIncrement} />
                     <h1>{selected.upvotes}</h1>
                 </div>
                 <div className="w-4/6 flex flex-col space-y-2">
@@ -115,7 +124,9 @@ function FeedbackDetails({selected, setSelected, setDetails, data, suggestions, 
                                             </h1>
                                         </div>
                                         <div className="w-1/5 text-blue-900 font-bold flex justify-end">
-                                            <h1>Reply</h1>
+                                            <h1>
+                                                Reply
+                                            </h1>
                                         </div>
                                     </div>
                                     <div className="w-full h-3/5 text-gray-400">

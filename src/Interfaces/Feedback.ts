@@ -13,4 +13,9 @@ export interface category {
     isActive: string,
 }
 
+export interface comment {
+    content: string,
+    user: object | string,
+}
+
 
