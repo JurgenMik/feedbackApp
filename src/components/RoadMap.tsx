@@ -2,7 +2,7 @@ import React from 'react';
 import {GoChevronLeft, GoChevronUp} from 'react-icons/go';
 import {BsDot, BsFillChatFill} from 'react-icons/bs';
 
-function RoadMap({handleBack, handleCreateView, live, progress, planned} : any) {
+function RoadMap({handleBack, handleCreateView, live, progress, planned, handleDetailedView} : any) {
 
     return (
         <div className="w-full h-full">
@@ -36,7 +36,7 @@ function RoadMap({handleBack, handleCreateView, live, progress, planned} : any) 
                         {planned.in_planning.map((details : any, index : number) => {
                             return (
                                 <div className="w-4/5 h-64 flex flex-col border-t-8 border-orange-400 rounded-lg mt-6" key={index}>
-                                    <div className="w-4/5 h-full ml-auto mr-auto mt-6">
+                                    <div onClick={e => handleDetailedView(details)} className="w-4/5 h-full ml-auto mr-auto mt-6">
                                         <div className="w-full flex flex-row items-center">
                                             <BsDot className="text-4xl text-orange-400" />
                                             <h1 className="text-gray-400">
@@ -85,7 +85,7 @@ function RoadMap({handleBack, handleCreateView, live, progress, planned} : any) 
                         {progress.in_progress.map((details : any, index : number) => {
                             return (
                                 <div className="w-4/5 h-64 flex flex-col border-t-8 border-fuchsia-500 rounded-md mt-6" key={index}>
-                                    <div className="w-4/5 h-full ml-auto mr-auto mt-6">
+                                    <div onClick={e => handleDetailedView(details)} className="w-4/5 h-full ml-auto mr-auto mt-6">
                                         <div className="w-full flex flex-row items-center">
                                             <BsDot className="text-4xl text-fuchsia-500" />
                                             <h1 className="text-gray-400">
@@ -134,7 +134,7 @@ function RoadMap({handleBack, handleCreateView, live, progress, planned} : any) 
                         {live.in_live.map((details : any, index : number) => {
                            return (
                                 <div className="w-4/5 h-64 flex flex-col border-t-8 border-sky-400 rounded-md" key={index}>
-                                    <div className="w-4/5 h-full ml-auto mr-auto mt-6">
+                                    <div onClick={e => handleDetailedView(details)} className="w-4/5 h-full ml-auto mr-auto mt-6">
                                         <div className="w-full flex flex-row items-center">
                                             <BsDot className="text-4xl text-sky-400" />
                                             <h1 className="text-gray-400">

@@ -157,7 +157,7 @@ function App() {
       <div className="w-full h-screen">
           {details ? <FeedbackDetails selected={selected} setSelected={setSelected} setDetails={setDetails} data={data} suggestions={suggestions} setSuggestions={setSuggestions} /> :
             create ? <CreateFeedback handleBack={handleBack} setSuggestions={setSuggestions} suggestions={suggestions} setCreate={setCreate} /> :
-            view ? <RoadMap handleBack={handleBack} handleCreateView={handleCreateView} live={live} planned={planned} progress={progress} /> :
+            view ? <RoadMap handleBack={handleBack} handleCreateView={handleCreateView} live={live} planned={planned} progress={progress} handleDetailedView={handleDetailedView} /> :
           <div className="w-3/4 h-full ml-auto mr-auto grid grid-cols-6">
               <div className="col-span-2 w-full h-full flex flex-col items-center space-y-6">
                   <div className="w-3/4 h-40 mt-8 rounded-xl bg-background bg-cover mb-6">
