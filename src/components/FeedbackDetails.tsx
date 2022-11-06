@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {GoChevronLeft, GoChevronUp} from 'react-icons/go';
 import {BsFillChatFill} from 'react-icons/bs';
 import EditFeedback from './EditFeedback';
@@ -18,8 +18,17 @@ function FeedbackDetails({selected, setSelected, setDetails, data, suggestions, 
         }
     })
 
+    useEffect(() => {
+        handleUpdatedInfo()
+    },[selected])
+
     const handleBack = () => {
         setDetails(false);
+    }
+
+    const handleUpdatedInfo = () => {
+       setSuggestions(suggestions.filter((suggestions : any) =>
+           suggestions.id !== selected.id).concat(selected));
     }
 
     const handleCommentPost = () => {
@@ -31,7 +40,6 @@ function FeedbackDetails({selected, setSelected, setDetails, data, suggestions, 
 
     const handleVoteIncrement = () => {
         const value = selected.upvotes;
-
         const increment = value + 1;
 
         setSelected({...selected, upvotes : increment});

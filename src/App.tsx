@@ -132,7 +132,7 @@ function App() {
         return suggestions;
     }
 
-    const filteredList = useMemo(handleFilters, [category, suggestions]);
+    const filteredList = useMemo(handleFilters,[category, suggestions]);
 
     const handleRoadMapView = () => {
         setView(true);
