@@ -10,6 +10,7 @@ Product feedback app [Frontend Mentor Challenge](https://www.frontendmentor.io/c
 * <storng>Filter</strong> suggestions by category & see active states
 * <strong>Create</strong> a product feedback request
 * <strong>Edit</strong> a product feedback request
+* Receive form <strong>validations</strong> when trying to create/edit feedback requests
 * <strong>Delete</strong> feedback
 * Detailed view of a feedback request
 * Add <strong>comments</strong> to feedback requests

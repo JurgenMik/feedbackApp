@@ -18,4 +18,9 @@ export interface comment {
     user: object | string,
 }
 
+export interface validate {
+    titleError: string,
+    descriptionError: string,
+}
+
 

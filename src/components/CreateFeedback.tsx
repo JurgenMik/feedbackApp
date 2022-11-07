@@ -2,9 +2,14 @@ import React, {useState} from 'react';
 import {GoChevronLeft} from 'react-icons/go';
 import {BsPlus} from 'react-icons/bs';
 import {feedbackInterface} from "../Interfaces/Feedback";
+import {validate} from "../Interfaces/Feedback";
 
 function CreateFeedback({handleBack, setSuggestions, suggestions, setCreate} : any) {
 
+    const [validate, setValidate] = useState<validate>({
+        titleError: '',
+        descriptionError: '',
+    })
     const [feedback, setFeedback] = useState<feedbackInterface>({
         title: '',
         category: '',
@@ -22,10 +27,38 @@ function CreateFeedback({handleBack, setSuggestions, suggestions, setCreate} : a
         setFeedback({...feedback, [e.target.name] : e.target.value});
     }
 
-    const handleFeedbackSave = () => {
-        setSuggestions(suggestions.concat(feedback));
+    const handleValidation = () => {
+        let titleError = '';
+        let descriptionError = '';
 
-        setCreate(false);
+        if (!feedback.title) {
+            titleError = 'Please provide a title for your feedback';
+        }
+
+        if (!feedback.description) {
+            descriptionError = "Please provide a description for your feedback";
+        }
+
+        if (titleError) {
+            setValidate({...validate, titleError : titleError});
+            return false;
+        }
+
+        if (descriptionError) {
+            setValidate({...validate, descriptionError : descriptionError});
+            return false;
+        }
+        return true;
+    }
+
+    const handleFeedbackSave = () => {
+        let isValid : boolean = handleValidation();
+
+        if (isValid) {
+            setSuggestions(suggestions.concat(feedback));
+
+            setCreate(false);
+        }
     }
 
     return (
@@ -45,6 +78,9 @@ function CreateFeedback({handleBack, setSuggestions, suggestions, setCreate} : a
                     </div>
                     <div className="w-full mt-8 text-2xl font-bold text-slate-700">
                         <h1>Create New Feedback</h1>
+                    </div>
+                    <div className="text-red-600">
+                        {validate.titleError}
                     </div>
                     <div className="w-full mt-8">
                         <h1 className="font-bold text-slate-700 text-lg">
@@ -77,6 +113,9 @@ function CreateFeedback({handleBack, setSuggestions, suggestions, setCreate} : a
                             <option value="Enhancement">Enhancement</option>
                             <option value="UX">UX</option>
                         </select>
+                    </div>
+                    <div className="text-red-600">
+                        {validate.descriptionError}
                     </div>
                     <div className="w-full mt-8">
                         <h1 className="font-bold text-slate-700 text-lg">

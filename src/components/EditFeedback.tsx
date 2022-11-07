@@ -1,8 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {GoChevronLeft} from "react-icons/go";
 import {BsPlus} from "react-icons/bs";
+import {validate} from "../Interfaces/Feedback";
 
 function EditFeedback({selected, setSelected, setEdit, suggestions, setSuggestions} : any) {
+
+    const [validate, setValidate] = useState<validate>({
+        titleError: '',
+        descriptionError: '',
+    })
 
     const handleBack = () => {
         setEdit(false);
@@ -16,11 +22,39 @@ function EditFeedback({selected, setSelected, setEdit, suggestions, setSuggestio
         setSelected({...selected, [e.target.name] : e.target.value});
     }
 
-    const handleSaveEdit = () => {
-        setSuggestions(suggestions.filter((suggestions : any) =>
-            suggestions.id !== selected.id).concat(selected));
+    const handleValidation = () => {
+        let titleError = '';
+        let descriptionError = '';
 
-        setEdit(false);
+        if (!selected.title) {
+            titleError = 'Please provide a title for your feedback';
+        }
+
+        if (!selected.description) {
+            descriptionError = "Please provide a description for your feedback";
+        }
+
+        if (titleError) {
+            setValidate({...validate, titleError : titleError});
+            return false;
+        }
+
+        if (descriptionError) {
+            setValidate({...validate, descriptionError : descriptionError});
+            return false;
+        }
+        return true;
+    }
+
+    const handleSaveEdit = () => {
+        let isValid : boolean = handleValidation();
+
+        if (isValid) {
+            setSuggestions(suggestions.filter((suggestions : any) =>
+                suggestions.id !== selected.id).concat(selected));
+
+            setEdit(false);
+        }
     }
 
     const handleDelete = () => {
@@ -49,6 +83,9 @@ function EditFeedback({selected, setSelected, setEdit, suggestions, setSuggestio
                         <h1>Editing `{selected.title}`</h1>
                     </div>
                     <div className="w-full mt-8">
+                        <div className="text-red-600">
+                            {validate.titleError}
+                        </div>
                         <h1 className="font-bold text-slate-700 text-lg">
                             Feedback Title
                         </h1>
@@ -102,6 +139,9 @@ function EditFeedback({selected, setSelected, setEdit, suggestions, setSuggestio
                         </select>
                     </div>
                     <div className="w-full mt-8">
+                        <div className="text-red-600">
+                            {validate.descriptionError}
+                        </div>
                         <h1 className="font-bold text-slate-700 text-lg">
                             Feedback Detail
                         </h1>
